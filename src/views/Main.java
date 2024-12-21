@@ -55,10 +55,10 @@ public class Main {
 
         assignRolePrivileges(user);
 
-        if (user instanceof Student) {
-            System.out.println("Redirecting to course registration...");
-            registerForCourses((Student) user);
-        }
+//        if (user instanceof Student) {
+//            System.out.println("Redirecting to course registration...");
+//            registerForCourses((Student) user);
+//        }
 
         saveStudents();
         saveTeachers();
