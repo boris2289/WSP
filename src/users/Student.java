@@ -1,16 +1,15 @@
 package users;
-import java.util.HashSet;
+
+import exceptions.LowHIndexException;
+import studyingProcess.Course;
+import studyingProcess.Grade;
+import ENUMS.*;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import ENUMS.Language;
-import ENUMS.Role;
-import studyingProcess.Course;
-import studyingProcess.Grade;
-
 
 public class Student extends User implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
@@ -20,11 +19,11 @@ public class Student extends User implements Serializable, Cloneable {
     private double GPA;
     private List<Course> enrolledCourses;
     private Map<Course, Grade> grades;
+    private Researcher supervisor; // Researcher who supervises the student
 
     public Student(String userId, String name, String email, String phoneNumber, String password, Language preferredLanguage,
-                   String major, String minor, double GPA) 
-    {
-        super(userId, name, email, phoneNumber,password, Role.STUDENT, preferredLanguage);
+                   String major, String minor, double GPA) {
+        super(userId, name, email, phoneNumber, password, Role.STUDENT, preferredLanguage);
         this.major = major;
         this.minor = minor;
         this.GPA = GPA;
@@ -32,6 +31,15 @@ public class Student extends User implements Serializable, Cloneable {
         this.setRole(Role.STUDENT);
     }
 
+    // Method to assign a supervisor
+    public void assignSupervisor(Researcher researcher) throws LowHIndexException {
+        if (researcher.getHIndex() < 3) {
+            throw new LowHIndexException("Researcher with h-index less than 3 cannot be a supervisor.");
+        }
+        this.supervisor = researcher;
+    }
+
+    // Other methods
     public void enrollInCourse(Course course) {
         enrolledCourses.add(course);
     }
@@ -44,7 +52,6 @@ public class Student extends User implements Serializable, Cloneable {
         return enrolledCourses;
     }
 
-
     public void setGrade(Course course, Grade grade) {
         grades.put(course, grade);
     }
@@ -53,12 +60,9 @@ public class Student extends User implements Serializable, Cloneable {
         return grades;
     }
 
-
     public double calculateGPA() {
         return GPA;
     }
-
-    
 
     @Override
     public String toString() {
