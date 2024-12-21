@@ -41,9 +41,6 @@ public class Teacher extends Employee implements Serializable, Cloneable {
                 getUserId(), academicTitle, yearsOfExperience, getSalary(), coursesTaught);
     }
 
-    public List<Course> getCourses() {
-        return coursesTaught;
-    }
 
     @Override
     public boolean equals(Object o) {

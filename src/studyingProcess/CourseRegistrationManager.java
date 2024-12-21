@@ -16,6 +16,10 @@ public class CourseRegistrationManager {
     private HashMap<String, Student> students;
 
     public CourseRegistrationManager() {
+        loadAllInfo();
+    }
+
+    public void loadAllInfo(){
         this.courses = loadCoursesFromFile();
         this.teachers = loadTeachersFromFile();
         this.students = loadStudentsFromFile();
@@ -63,7 +67,7 @@ public class CourseRegistrationManager {
 
         selectedTeacher.addCourse(newCourse);
 
-        this.courses.add(newCourse);
+
         saveCoursesToFile(this.courses);
         saveTeachersToFile(this.teachers);
 
@@ -118,22 +122,28 @@ public class CourseRegistrationManager {
             return;
         }
 
-        System.out.println("Courses taught by " + selectedTeacher.getName() + ":");
-        for (Course course : coursesTaught) {
-            System.out.println("- " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
+        System.out.println("Select a course taught by " + selectedTeacher.getName() + ":");
+        for (int i = 0; i < coursesTaught.size(); i++) {
+            Course course = coursesTaught.get(i);
+            System.out.println(i + ". " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
         }
+        int indexChosen = Integer.parseInt(scanner.nextLine());
+        String courseId = coursesTaught.get(indexChosen).getCourseId();
 
-        System.out.print("Enter the ID of the course you wish to join: ");
-        String courseId = scanner.nextLine();
 
         Course selectedCourse = findCourseById(coursesTaught, courseId);
+        this.courses.remove(selectedCourse);
         if (selectedCourse != null) {
             System.out.println("You have successfully joined the course: " + selectedCourse.getCourseName());
+            selectedCourse.addEnrolledStudent(selectedStudent);
+            selectedStudent.enrollInCourse(selectedCourse);
+            this.courses.add(selectedCourse);
+            saveStudentsToFile(this.students);
+            saveCoursesToFile(this.courses);
         } else {
             System.out.println("Invalid course ID.");
         }
-        selectedStudent.enrollInCourse(selectedCourse);
-        saveStudentsToFile(this.students);
+
     }
 
 
@@ -141,25 +151,51 @@ public class CourseRegistrationManager {
 
     // Удаление курса
     public void removeCourse(Scanner scanner) {
-        System.out.println("Choose the course to remove");
-
-        for (int i = 0; i < courses.size(); i++) {
-            Course course = courses.get(i);
-            System.out.println(i + ". " + course);
+        if (this.courses.isEmpty()) {
+            System.out.println(this.students);
         }
-        int courseToDelete = Integer.parseInt(scanner.nextLine());
-        Course toRemoveCourse = courses.get(courseToDelete);
-        courses.remove(courseToDelete);
+        else{
+            System.out.println("Choose the course to remove");
+            for (int i = 0; i < courses.size(); i++) {
+                Course course = courses.get(i);
+                System.out.println(i + ". " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
+            }
 
-        for (Teacher teacher : teachers.values()) {
-            teacher.removeCourse(toRemoveCourse);
-        }
-        for (Student student : students.values()) {
-            student.removeCourse(toRemoveCourse);
+
+            int courseToDeleteIndex = Integer.parseInt(scanner.nextLine());
+            Course toRemoveCourse = courses.get(courseToDeleteIndex);
+            Teacher instructorTeacher = toRemoveCourse.getInstructor();
+            String instructorId = instructorTeacher.getUserId();
+            List<Student> studentList = toRemoveCourse.getEnrolledStudents();
+
+
+
+            toRemoveCourse.removeInstructor();
+            instructorTeacher.removeCourse(toRemoveCourse);
+            this.teachers.put(instructorId, instructorTeacher);
+
+            System.out.println(studentList);
+            for (Student student : this.students.values()) {
+                if (studentList.contains(student)) {
+
+                    student.finishCourse(toRemoveCourse);
+                    toRemoveCourse.removeStudent(student);
+                    this.students.put(student.getUserId(), student);
+
+                }
+            }
+
+            courses.remove(courseToDeleteIndex);
+
+            saveCoursesToFile(courses);
+            saveTeachersToFile(teachers);
+            saveStudentsToFile(students);
+
+            loadAllInfo();
+            System.out.println("Course " + toRemoveCourse + " removed successfully.");
         }
 
-        saveCoursesToFile(courses);
-        System.out.println("Course " + toRemoveCourse + " removed successfully.");
+
     }
 
 
@@ -219,6 +255,38 @@ public class CourseRegistrationManager {
         }
         return new ArrayList<>();
     }
+
+    public void printAllInfo(){
+
+        // Проверка и вывод информации о курсах у каждого учителя
+        if (teachers != null) {
+            System.out.println("=== Teachers ===");
+            for (Teacher teacher : teachers.values()) {
+                System.out.println("Teacher ID: " + teacher.getUserId());
+                System.out.println("Name: " + teacher.getName());
+                System.out.println("Courses:");
+                for (Course course : teacher.getCoursesTaught()) {
+                    System.out.println("  - " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
+                }
+                System.out.println();
+            }
+        }
+
+        // Проверка и вывод информации о курсах у каждого студента
+        if (students != null) {
+            System.out.println("=== Students ===");
+            for (Student student : students.values()) {
+                System.out.println("Student ID: " + student.getUserId());
+                System.out.println("Name: " + student.getName());
+                System.out.println("Courses:");
+                for (Course course : student.getEnrolledCourses()) {
+                    System.out.println("  - " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
+                }
+                System.out.println();
+            }
+        }
+
+}
 
     private static void saveTeachersToFile(HashMap<String, Teacher> teachers) {
         try (FileOutputStream fileOut = new FileOutputStream(TEACHER_FILE)) {

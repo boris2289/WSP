@@ -20,7 +20,6 @@ public class Student extends User implements Serializable, Cloneable {
     private double GPA;
     private List<Course> enrolledCourses;
     private Map<Course, Grade> grades;
-    private HashSet<Course> courses;
 
     public Student(String userId, String name, String email, String phoneNumber, String password, Language preferredLanguage,
                    String major, String minor, double GPA) 
@@ -31,13 +30,20 @@ public class Student extends User implements Serializable, Cloneable {
         this.GPA = GPA;
         this.enrolledCourses = new ArrayList<>();
         this.setRole(Role.STUDENT);
-        this.courses = new HashSet<>();
     }
 
     public void enrollInCourse(Course course) {
         enrolledCourses.add(course);
     }
-    
+
+    public void finishCourse(Course course) {
+        enrolledCourses.remove(course);
+    }
+
+    public List<Course> getEnrolledCourses() {
+        return enrolledCourses;
+    }
+
 
     public void setGrade(Course course, Grade grade) {
         grades.put(course, grade);
@@ -47,26 +53,11 @@ public class Student extends User implements Serializable, Cloneable {
         return grades;
     }
 
-    public List<Course> getEnrolledCourses() {
-        return enrolledCourses;
-    }
 
     public double calculateGPA() {
         return GPA;
     }
-    
-    public void addCourse(Course course) {
-        if (course != null) {
-            courses.add(course);
-            System.out.println("Course " + course.getCourseName() + " added successfully.");
-        } else {
-            System.out.println("Invalid course.");
-        }
-    }
 
-    public void removeCourse(Course course) {
-        courses.remove(course);
-    }
     
 
     @Override

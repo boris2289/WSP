@@ -15,7 +15,8 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Main {
+public class RegistrationProcess {
+
     private static final String STUDENTS_FILE = "students.txt";
     private static final String TEACHERS_FILE = "teachers.txt";
     private static final String COURSES_FILE = "courses.txt";
@@ -243,7 +244,7 @@ public class Main {
 
         Course selectedCourse = courses.get(courseId);
         if (selectedCourse != null) {
-            student.addCourse(selectedCourse);
+            student.enrollInCourse(selectedCourse);
             System.out.println("Course " + selectedCourse.getCourseName() + " registered successfully.");
         } else {
             System.out.println("Invalid course ID. Please try again.");

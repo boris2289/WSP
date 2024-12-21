@@ -5,6 +5,7 @@ import users.Teacher;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Course implements Serializable{
     private String courseId;
@@ -26,6 +27,10 @@ public class Course implements Serializable{
         this.enrolledStudents = new ArrayList<>();
     }
 
+    public void addEnrolledStudent(Student student) {
+        enrolledStudents.add(student);
+    }
+
     public String getCourseId() {
         return courseId;
     }
@@ -41,24 +46,39 @@ public class Course implements Serializable{
     public void setInstructor(Teacher t) {
         this.instructor = t;
     }
+
+    public void removeInstructor() {
+        this.instructor = null;
+    }
     
     public void removeStudent(Student student) {
         enrolledStudents.remove(student);
         System.out.println("Student " + student.getName() + " removed from the course: " + this.courseName);
     }
 
-    public void addStudent(Student student) {
-        enrolledStudents.add(student);
-    }
     
 
     public List<Student> getEnrolledStudents() {
         return enrolledStudents;
     }
 
-//    @Override
-//    public String toString() {
-//        return String.format("Course{id='%s', name='%s'}",
-//                courseId, courseName);
-//    }
+    @Override
+    public String toString() {
+        return "Course: " + this.getCourseName() + " Id: "+ this.getCourseId();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return courseId.equals(course.courseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseId);
+    }
+
 }

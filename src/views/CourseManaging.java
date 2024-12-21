@@ -15,6 +15,7 @@ public class CourseManaging {
         System.out.println("Remove or add course?");
         System.out.println("1. Add");
         System.out.println("2. Remove");
+        System.out.println("3. View information");
 
         int selected = Integer.parseInt(scanner.nextLine());
 
@@ -25,8 +26,8 @@ public class CourseManaging {
             case 2:
                 toRemove(scanner, manager);
                 break;
-            default:
-                System.out.println("Invalid choice. Please restart the application.");
+            case 3:
+                manager.printAllInfo();
         }
     }
 
