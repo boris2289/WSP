@@ -1,6 +1,7 @@
 package views;
 import ENUMS.Urgency;
 import organizations.DeansOffice;
+import organizations.NewsOffice;
 import serialization.Loader;
 import users.Student;
 import users.Teacher;
@@ -18,14 +19,17 @@ public class Messanger {
 
     public static void main(String[] args) {
         Loader loader = new Loader();
+        NewsOffice newsOffice = new NewsOffice();
         DeansOffice office = new DeansOffice();
-        teachers = loader.loadTeachersFromFile();
-        students = loader.loadStudentsFromFile();
+        teachers = Loader.loadTeachersFromFile();
+        students = Loader.loadStudentsFromFile();
 
         System.out.println("Choose option: ");
         System.out.println("1. Send complaint");
         System.out.println("2. View complains");
         System.out.println("3. Post news");
+        System.out.println("4. View news");
+        System.out.println("5. Leave comment");
 
         Scanner scanner = new Scanner(System.in);
         int choice = scanner.nextInt();
@@ -37,12 +41,44 @@ public class Messanger {
             case 2:
                 office.deserializeComplaints("complaints.txt");
                 break;
+            case 3:
+                publishNews(scanner, newsOffice);
+                break;
+            case 4:
+                newsOffice.deserializeNews("news.txt");
+                break;
             default:
                 System.out.println(" ");
         }
 
     }
 
+    public static void publishNews(Scanner scanner, NewsOffice newsOffice) {
+        User publisher = null;
+
+        int choice = dialogueWindow(scanner);
+        switch (choice) {
+            case 1:
+                publisher = chooseTeacher(scanner, "Who are you?");
+                break;
+            case 2:
+                publisher = chooseStudent(scanner, "Who are you?");
+                break;
+            default:
+                System.out.println("Invalid choice, exiting.");
+                return;
+        }
+
+        if (publisher == null) {
+            System.out.println("Publisher not found.");
+            return;
+        }
+
+        System.out.println("What would you like to publish?");
+        String option = scanner.nextLine();
+
+        newsOffice.createNewsPost(publisher, option);
+    }
 
     public static void sendComplaint(Scanner scanner, DeansOffice office) {
 
@@ -56,31 +92,14 @@ public class Messanger {
         int urgIndex = scanner.nextInt();
         scanner.nextLine(); // Очистка буфера после nextInt()
 
-        switch (urgIndex) {
-            case 1:
-                urg = Urgency.LOW;
-                break;
-            case 2:
-                urg = Urgency.MEDIUM;
-                break;
-            case 3:
-                urg = Urgency.HIGH;
-                break;
-            default:
-                urg = Urgency.MEDIUM;
-                break;
-        }
-
-        System.out.print("Enter your message: ");
+        urg = switch (urgIndex) {
+            case 1 -> Urgency.LOW;
+            case 3 -> Urgency.HIGH;
+            default -> Urgency.MEDIUM;
+        };
+        int choice = dialogueWindow(scanner);
+        System.out.println("Enter your message: ");
         String message = scanner.nextLine();
-
-        System.out.println("Are you a teacher or a student?");
-        System.out.println("1. Teacher");
-        System.out.println("2. Student");
-        System.out.print("Enter your choice: ");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine();
 
         switch (choice) {
             case 1:
@@ -96,6 +115,17 @@ public class Messanger {
             default:
                 System.out.println(" ");
         }
+    }
+
+    public static int dialogueWindow(Scanner scanner) {
+        System.out.println("Are you a teacher or a student?");
+        System.out.println("1. Teacher");
+        System.out.println("2. Student");
+        System.out.print("Enter your choice: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        return choice;
     }
 
 

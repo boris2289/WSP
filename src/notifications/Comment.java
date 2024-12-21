@@ -21,4 +21,8 @@ public class Comment {
                 ", timeStamp=" + timeStamp +
                 '}';
     }
+
+    public String getContent() {
+        return content;
+    }
 }

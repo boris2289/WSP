@@ -1,35 +1,56 @@
 package notifications;
+
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
+import users.*;
 
-public class News {
-    private String title;
-    private String content;
-    private Date publishedDate;
-    private List<Comment> comments;
+public class News implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private static int idCounter = 1;
+    private final String newsId;
+    private final String content;
+    private final User sender;
+    private final Date timestamp;
 
-    public News(String title, String content, Date publishedDate) {
-        this.title = title;
+    // HashMap to store comments: key is userId, value is list of comments by that user
+    private final HashMap<String, List<Comment>> comments;
+
+    public News(String content, User sender, Date timestamp) {
+        this.newsId = "news_" + idCounter++;
         this.content = content;
-        this.publishedDate = publishedDate;
-        this.comments = new ArrayList<>();
+        this.sender = sender;
+        this.timestamp = timestamp;
+        this.comments = new HashMap<>();
     }
 
-    public String getTitle() {
-        return title;
+    public String getNewsId() {
+        return newsId;
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
+    public String getContent() {
+        return content;
     }
 
-    @Override
-    public String toString() {
-        return "News{" +
-                "title='" + title + '\'' +
-                ", content='" + content + '\'' +
-                ", publishedDate=" + publishedDate +
-                '}';
+    public User getSender() {
+        return sender;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    // Getter for comments
+    public HashMap<String, List<Comment>> getComments() {
+        return comments;
+    }
+
+    // Method to add a comment
+    public void addComment(User user, String commentContent) {
+        Comment comment = new Comment(user, commentContent, new Date());
+        comments.putIfAbsent(user.getUserId(), new ArrayList<>());
+        comments.get(user.getUserId()).add(comment);
     }
 }
