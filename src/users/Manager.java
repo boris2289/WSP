@@ -26,13 +26,13 @@ public class Manager extends User {
         }
     }
 
-    public void registerStudentToCourse(Student student, Course course, CourseRegistrationManager manager) {
-        manager.registerStudentToCourse(student, course);
-    }
-
-    public void assignTeacherToCourse(Teacher teacher, Course course, CourseRegistrationManager manager) {
-        manager.assignTeacherToCourse(teacher, course);
-    }
+//    public void registerStudentToCourse(Student student, Course course, CourseRegistrationManager manager) {
+//        manager.registerStudentToCourse(student, course);
+//    }
+//
+//    public void assignTeacherToCourse(Teacher teacher, Course course, CourseRegistrationManager manager) {
+//        manager.assignTeacherToCourse(teacher, course);
+//    }
     public void addCourse(Course course) {
         managedCourses.add(course);
     }

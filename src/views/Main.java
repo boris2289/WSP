@@ -1,4 +1,5 @@
 package views;
+import java.time.LocalDate;
 
 import users.Student;
 import users.Teacher;
@@ -7,6 +8,9 @@ import ENUMS.Language;
 import ENUMS.Role;
 import serialization.SerializationUtil;
 import studyingProcess.Course;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import java.io.*;
 import java.util.HashMap;
@@ -92,7 +96,14 @@ public class Main {
             System.out.print("Enter your years of experience: ");
             int experience = Integer.parseInt(scanner.nextLine());
 
-            newUser = new Teacher(email, name, email, phoneNumber,password, language, title, experience);
+            System.out.print("Enter your salary: ");
+            int salary = Integer.parseInt(scanner.nextLine());
+
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.print("Your hiring date: " + date + '\n');
+
+            newUser = new Teacher(email, name, email, phoneNumber,password, language, title, experience, salary, date);
             teachers.put(email, (Teacher) newUser);
         }
 

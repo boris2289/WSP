@@ -8,16 +8,16 @@ import studyingProcess.Course;
 import ENUMS.Language;
 import ENUMS.Role;
 
-public class Teacher extends User implements Serializable, Cloneable {
+public class Teacher extends Employee implements Serializable, Cloneable {
     private static final long serialVersionUID = 1L;
 
     private List<Course> coursesTaught;
     private String academicTitle;
     private int yearsOfExperience;
 
-    public Teacher(String userId, String name, String email, String phoneNumber,String password, Language preferredLanguage,
-                   String academicTitle, int yearsOfExperience) {
-        super(userId, name, email, phoneNumber,password, Role.TEACHER, preferredLanguage);
+    public Teacher(String userId, String name, String email, String phoneNumber, String password, Language preferredLanguage,
+                   String academicTitle, int yearsOfExperience, double salary, java.util.Date hireDate) {
+        super(userId, name, email, phoneNumber, password, Role.TEACHER, preferredLanguage, salary, hireDate);
         this.academicTitle = academicTitle;
         this.yearsOfExperience = yearsOfExperience;
         this.coursesTaught = new ArrayList<>();
@@ -33,11 +33,11 @@ public class Teacher extends User implements Serializable, Cloneable {
 
     @Override
     public String toString() {
-        return String.format("Teacher{id='%s', title='%s', experience=%d years, courses=%s}",
-                userId, academicTitle, yearsOfExperience, coursesTaught);
+        return String.format("Teacher{id='%s', title='%s', experience=%d years, salary=%.2f, courses=%s}",
+                getUserId(), academicTitle, yearsOfExperience, getSalary(), coursesTaught);
     }
-    
-    public List<Course> getCourses() { 
+
+    public List<Course> getCourses() {
         return coursesTaught;
     }
 
