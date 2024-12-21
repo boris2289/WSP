@@ -1,15 +1,12 @@
 package views;
 import ENUMS.Urgency;
-import ENUMS.Role;
-import ENUMS.Urgency;
-import notifications.Complaint;
 import organizations.DeansOffice;
 import serialization.Loader;
-import studyingProcess.Course;
 import users.Student;
 import users.Teacher;
 import users.User;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -21,6 +18,7 @@ public class Messanger {
 
     public static void main(String[] args) {
         Loader loader = new Loader();
+        DeansOffice office = new DeansOffice();
         teachers = loader.loadTeachersFromFile();
         students = loader.loadStudentsFromFile();
 
@@ -34,17 +32,19 @@ public class Messanger {
 
         switch (choice) {
             case 1:
-                sendComplaint(scanner);
-//            case 2:
-//                return Role.TEACHER;
+                sendComplaint(scanner, office);
+                break;
+            case 2:
+                office.deserializeComplaints("complaints.txt");
+                break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println(" ");
         }
 
     }
 
-    public static void sendComplaint(Scanner scanner) {
-        DeansOffice office = new DeansOffice();
+
+    public static void sendComplaint(Scanner scanner, DeansOffice office) {
 
         System.out.println("Preferred Urgency:");
         System.out.println("1. LOW");
@@ -53,17 +53,24 @@ public class Messanger {
 
         Urgency urg;
         System.out.print("Enter the number of your choice: ");
-        int urgIndex = Integer.parseInt(scanner.nextLine());
+        int urgIndex = scanner.nextInt();
+        scanner.nextLine(); // Очистка буфера после nextInt()
+
         switch (urgIndex) {
             case 1:
-                urg=  Urgency.LOW;
+                urg = Urgency.LOW;
+                break;
             case 2:
-                urg= Urgency.MEDIUM;
+                urg = Urgency.MEDIUM;
+                break;
             case 3:
-                urg= Urgency.HIGH;
+                urg = Urgency.HIGH;
+                break;
             default:
-                urg= Urgency.MEDIUM;;
+                urg = Urgency.MEDIUM;
+                break;
         }
+
         System.out.print("Enter your message: ");
         String message = scanner.nextLine();
 
@@ -72,25 +79,28 @@ public class Messanger {
         System.out.println("2. Student");
         System.out.print("Enter your choice: ");
 
-        int choice = Integer.parseInt(scanner.nextLine());
+        int choice = scanner.nextInt();
+        scanner.nextLine();
 
         switch (choice) {
             case 1:
                 User complaintFromTeacher = chooseTeacher(scanner, "Who are you ?");
                 User complaintToStudent = chooseStudent(scanner, "Send complaint to ?");
-                office.setComplaint(complaintFromTeacher,complaintToStudent, urg, message);
+                office.setComplaint(complaintFromTeacher, complaintToStudent, urg, message);
                 break;
             case 2:
                 User complaintFromStudent = chooseStudent(scanner, "Who are you ?");
                 User complaintToTeacher = chooseTeacher(scanner, "Send complaint to ?");
-                office.setComplaint(complaintFromStudent,complaintToTeacher, urg, message);
+                office.setComplaint(complaintFromStudent, complaintToTeacher, urg, message);
                 break;
+            default:
+                System.out.println(" ");
         }
-
     }
 
+
     public static Teacher chooseTeacher(Scanner scanner, String text) {
-        List<Teacher> t = (List<Teacher>) teachers.values();
+        List<Teacher> t = new ArrayList<>(teachers.values()); // Преобразуем коллекцию в список
         System.out.println(text);
         for (int i = 0; i < t.size(); i++) {
             System.out.println(i + ". " + t.get(i).getName());
@@ -100,12 +110,13 @@ public class Messanger {
     }
 
     public static Student chooseStudent(Scanner scanner, String text) {
-        List<Student> t = (List<Student>) students.values();
+        List<Student> t = new ArrayList<>(students.values()); // Преобразуем коллекцию в список
         System.out.println(text);
         for (int i = 0; i < t.size(); i++) {
             System.out.println(i + ". " + t.get(i).getName());
         }
-        int StudentIndex = Integer.parseInt(scanner.nextLine());
-        return t.get(StudentIndex);
+        int studentIndex = Integer.parseInt(scanner.nextLine());
+        return t.get(studentIndex);
     }
+
 }
