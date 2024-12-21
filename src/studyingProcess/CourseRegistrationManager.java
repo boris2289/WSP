@@ -139,58 +139,28 @@ public class CourseRegistrationManager {
 
 
 
+    // Удаление курса
+    public void removeCourse(Scanner scanner) {
+        System.out.println("Choose the course to remove");
 
+        for (int i = 0; i < courses.size(); i++) {
+            Course course = courses.get(i);
+            System.out.println(i + ". " + course);
+        }
+        int courseToDelete = Integer.parseInt(scanner.nextLine());
+        Course toRemoveCourse = courses.get(courseToDelete);
+        courses.remove(courseToDelete);
 
+        for (Teacher teacher : teachers.values()) {
+            teacher.removeCourse(toRemoveCourse);
+        }
+        for (Student student : students.values()) {
+            student.removeCourse(toRemoveCourse);
+        }
 
-
-    // Добавление курса
-
-
-//    // Удаление курса
-//    public void removeCourse(String courseId) {
-//        Course course = courses.remove(courseId);
-//        if (course != null) {
-//            // Удаляем курс у всех преподавателей и студентов
-//            for (Teacher teacher : teachers.values()) {
-//                teacher.removeCourse(courseId);
-//            }
-//            for (Student student : students.values()) {
-//                student.removeCourse(courseId);
-//            }
-//            saveCoursesToFile();
-//            System.out.println("Course " + courseId + " removed successfully.");
-//        } else {
-//            System.out.println("Course " + courseId + " not found.");
-//        }
-//    }
-//
-//    // Добавление курса преподавателю
-//    public void addCourseToTeacher(String teacherId, String courseId) {
-//        Teacher teacher = teachers.get(teacherId);
-//        Course course = courses.get(courseId);
-//
-//        if (teacher != null && course != null) {
-//            teacher.addCourse(course);
-//            saveTeachersToFile();
-//            System.out.println("Course " + courseId + " added to teacher " + teacherId + ".");
-//        } else {
-//            System.out.println("Teacher or Course not found.");
-//        }
-//    }
-//
-//    // Добавление курса студенту
-//    public void addCourseToStudent(String studentId, String courseId) {
-//        Student student = students.get(studentId);
-//        Course course = courses.get(courseId);
-//
-//        if (student != null && course != null) {
-//            student.addCourse(course);
-//            saveStudentsToFile();
-//            System.out.println("Course " + courseId + " added to student " + studentId + ".");
-//        } else {
-//            System.out.println("Student or Course not found.");
-//        }
-//    }
+        saveCoursesToFile(courses);
+        System.out.println("Course " + toRemoveCourse + " removed successfully.");
+    }
 
 
     private static Course findCourseById(List<Course> courses, String courseId) {

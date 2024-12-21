@@ -55,4 +55,10 @@ public class Course implements Serializable{
     public List<Student> getEnrolledStudents() {
         return enrolledStudents;
     }
+
+//    @Override
+//    public String toString() {
+//        return String.format("Course{id='%s', name='%s'}",
+//                courseId, courseName);
+//    }
 }
