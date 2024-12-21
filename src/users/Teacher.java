@@ -27,6 +27,10 @@ public class Teacher extends Employee implements Serializable, Cloneable {
         coursesTaught.add(course);
     }
 
+    public void removeCourse(Course course) {
+        coursesTaught.remove(course);
+    }
+
     public List<Course> getCoursesTaught() {
         return coursesTaught;
     }

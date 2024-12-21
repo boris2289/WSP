@@ -63,6 +63,10 @@ public class Student extends User implements Serializable, Cloneable {
             System.out.println("Invalid course.");
         }
     }
+
+    public void removeCourse(Course course) {
+        courses.remove(course);
+    }
     
 
     @Override
