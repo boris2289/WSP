@@ -72,6 +72,10 @@ public class Researcher extends User {
         return hIndex;
     }
 
+    public Collection<? extends ResearchPaper> getResearchPapers() {
+        return researchPapers;
+    }
+
     // Additional getter and setter methods, toString, etc.
 }
 

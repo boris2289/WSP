@@ -59,10 +59,6 @@ public class RegistrationProcess {
 
         assignRolePrivileges(user);
 
-//        if (user instanceof Student) {
-//            System.out.println("Redirecting to course registration...");
-//            registerForCourses((Student) user);
-//        }
 
         saveStudents();
         saveTeachers();
