@@ -100,4 +100,12 @@ public abstract class User implements Serializable, Cloneable {
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getLanguage() {
+        return preferredLanguage.toString();
+    }
 }

@@ -16,64 +16,85 @@ public class RegistrationProcess {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=== Welcome to the WSP ===");
-        System.out.println("What is your role ?");
-        System.out.println("1. Student");
-        System.out.println("2. Teacher");
-        System.out.println("3. Course Registration Manager");
-        System.out.println("4. Account Manager");
-
-        int roleChoice = scanner.nextInt();
+        System.out.println("Your action?");
+        System.out.println("1. Log in or Register");
+        System.out.println("2. View all users");
+        System.out.println("3. Remove user from platform");
+        int actionChoice = scanner.nextInt();
         scanner.nextLine();
-
-        System.out.print("Enter your login (email): ");
-        String email = scanner.nextLine();
-
-        System.out.print("Enter your password: ");
-        String password = scanner.nextLine();
-
-        Role chosenRole = null;
-        User user = null;
-        switch (roleChoice) {
+        switch (actionChoice) {
             case 1:
-                user = Admin.getStudents().get(email);
-                chosenRole = Role.STUDENT;
+                logIntoWSP(scanner);
                 break;
 
             case 2:
-                user = Admin.getTeachers().get(email);
-                chosenRole = Role.TEACHER;
+                Admin.viewAllUsers();
                 break;
 
             case 3:
-                user = Admin.getCoursesRegistrationManagers().get(email);
-                chosenRole = Role.COURSE_REGISTRATION_MANAGER;
-                break;
-
-            case 4:
-                user = Admin.getAccountManagers().get(email);
-                chosenRole = Role.ACCOUNT_MANAGER;
+                Admin.removeUser(scanner);
                 break;
         }
 
+    }
 
-        if (user == null) {
-            System.out.println("No account found. Registering a new user.");
-            user = Admin.registerNewUser(scanner, email, chosenRole);
-        } else {
-            System.out.println("Account found. Verifying password...");
-            if (!password.equals(user.getPassword())) {
-                System.out.println("Login failed. Incorrect password.");
-                return;
-            }
-        }
+public static void logIntoWSP(Scanner scanner) {
+    System.out.println("What is your role ?");
+    System.out.println("1. Student");
+    System.out.println("2. Teacher");
+    System.out.println("3. Course Registration Manager");
+    System.out.println("4. Account Manager");
 
-        System.out.println("Login successful!");
-        System.out.println(user);
+    int roleChoice = scanner.nextInt();
+    scanner.nextLine();
 
-        assignRolePrivileges(user);
+    System.out.print("Enter your login (email): ");
+    String email = scanner.nextLine();
+
+    System.out.print("Enter your password: ");
+    String password = scanner.nextLine();
+
+    Role chosenRole = null;
+    User user = null;
+    switch (roleChoice) {
+        case 1:
+            user = Admin.getStudents().get(email);
+            chosenRole = Role.STUDENT;
+            break;
+
+        case 2:
+            user = Admin.getTeachers().get(email);
+            chosenRole = Role.TEACHER;
+            break;
+
+        case 3:
+            user = Admin.getCoursesRegistrationManagers().get(email);
+            chosenRole = Role.COURSE_REGISTRATION_MANAGER;
+            break;
+
+        case 4:
+            user = Admin.getAccountManagers().get(email);
+            chosenRole = Role.ACCOUNT_MANAGER;
+            break;
     }
 
 
+    if (user == null) {
+        System.out.println("No account found. Registering a new user.");
+        user = Admin.registerNewUser(scanner, email, chosenRole);
+    } else {
+        System.out.println("Account found. Verifying password...");
+        if (!password.equals(user.getPassword())) {
+            System.out.println("Login failed. Incorrect password.");
+            return;
+        }
+    }
+
+    System.out.println("Login successful!");
+    System.out.println(user);
+
+    assignRolePrivileges(user);
+}
     private static void assignRolePrivileges(User user) {
         if (user instanceof Student) {
             System.out.println("Welcome, Student! Access granted to courses, grades, and student materials.");

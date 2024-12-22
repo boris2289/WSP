@@ -65,4 +65,13 @@ public class Teacher extends Employee implements Serializable, Cloneable {
         cloned.coursesTaught = new ArrayList<>(coursesTaught);
         return cloned;
     }
+
+    public String getTitle() {
+        return academicTitle;
+    }
+
+    public String getExperience() {
+        return String.valueOf(yearsOfExperience);
+    }
+
 }

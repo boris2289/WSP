@@ -114,4 +114,12 @@ public class Student extends User implements Serializable, Cloneable {
     public void receiveScholarship(Scholarship scholarship) {
         this.bankAccount += scholarship.getAmount();
     }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public String getGPA() {
+        return String.format("%.2f", GPA);
+    }
 }
