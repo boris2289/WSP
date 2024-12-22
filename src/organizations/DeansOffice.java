@@ -1,7 +1,7 @@
 package organizations;
 
+import abstractt.User;
 import notifications.*;
-import users.*;
 import ENUMS.*;
 import java.io.*;
 import java.util.*;

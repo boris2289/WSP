@@ -1,6 +1,5 @@
 package notifications;
 import ENUMS.Urgency;
-import users.User;
 
 import java.io.Serializable;
 

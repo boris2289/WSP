@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import ENUMS.*;
+import abstractt.User;
+import exceptions.InvalidParticipantException;
 import studyingProcess.*;
 
 import java.util.*;
@@ -62,7 +64,7 @@ public class Researcher extends User {
     }
 
     // Method to join a research project
-    public void joinResearchProject(ResearchProject project) {
+    public void joinResearchProject(ResearchProject project) throws InvalidParticipantException {
         researchProjects.add(project);
         project.addParticipant(this);
     }

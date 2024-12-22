@@ -5,14 +5,14 @@ import organizations.NewsOffice;
 import serialization.Loader;
 import users.Student;
 import users.Teacher;
-import users.User;
+import abstractt.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-public class Messanger {
+public class Messenger {
     private static final String NOTIFICATIONS = "notifications.txt";
     static HashMap<String, Teacher> teachers;
     static HashMap<String, Student> students;

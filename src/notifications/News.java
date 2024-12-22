@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
-import users.*;
+
+import abstractt.User;
 
 public class News implements Serializable {
     private static final long serialVersionUID = 1L;

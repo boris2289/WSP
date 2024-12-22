@@ -81,4 +81,7 @@ public class Course implements Serializable{
         return Objects.hash(courseId);
     }
 
+    public Object getName() {
+        return courseName;
+    }
 }

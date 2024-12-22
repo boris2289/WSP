@@ -1,6 +1,8 @@
 package users;
 
+import abstractt.User;
 import exceptions.LowHIndexException;
+import finance.Scholarship;
 import studyingProcess.Course;
 import studyingProcess.Grade;
 import ENUMS.*;
@@ -20,6 +22,8 @@ public class Student extends User implements Serializable, Cloneable {
     private List<Course> enrolledCourses;
     private Map<Course, Grade> grades;
     private Researcher supervisor; // Researcher who supervises the student
+    private boolean isWSPBlocked = false;
+    private double bankAccount = 0.0;
 
     public Student(String userId, String name, String email, String phoneNumber, String password, Language preferredLanguage,
                    String major, String minor, double GPA) {
@@ -27,6 +31,14 @@ public class Student extends User implements Serializable, Cloneable {
         this.major = major;
         this.minor = minor;
         this.GPA = GPA;
+        this.enrolledCourses = new ArrayList<>();
+        this.setRole(Role.STUDENT);
+    }
+    public Student(String userId, String name, String email, String phoneNumber, String password) {
+        super(userId, name, email, phoneNumber, password, Role.STUDENT, Language.ENGLISH);
+        this.major = "Not chosen";
+        this.minor = "Undefined";
+        this.GPA = 0.0;
         this.enrolledCourses = new ArrayList<>();
         this.setRole(Role.STUDENT);
     }
@@ -64,6 +76,10 @@ public class Student extends User implements Serializable, Cloneable {
         return GPA;
     }
 
+    public void setBlocked(){
+        this.isWSPBlocked = true;
+    }
+
     @Override
     public String toString() {
         return String.format("Student{id='%s', major='%s', GPA=%.2f, enrolledCourses=%s}",
@@ -90,5 +106,9 @@ public class Student extends User implements Serializable, Cloneable {
         Student cloned = (Student) super.clone();
         cloned.enrolledCourses = new ArrayList<>(enrolledCourses);
         return cloned;
+    }
+
+    public void receiveScholarship(Scholarship scholarship) {
+        this.bankAccount += scholarship.getAmount();
     }
 }

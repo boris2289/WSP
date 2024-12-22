@@ -1,6 +1,7 @@
-package studyingProcess;
+package managers;
 import serialization.Loader;
 import serialization.SerializationUtil;
+import studyingProcess.Course;
 import users.Student;
 import users.Teacher;
 import java.io.*;

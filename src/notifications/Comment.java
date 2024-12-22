@@ -1,5 +1,5 @@
 package notifications;
-import users.User;
+import abstractt.User;
 import java.util.Date;
 
 public class Comment {

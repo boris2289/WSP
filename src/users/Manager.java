@@ -1,8 +1,9 @@
 package users;
 
+import abstractt.User;
 import studyingProcess.Course;
-import studyingProcess.CourseRegistrationManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Manager extends User {
@@ -11,6 +12,10 @@ public class Manager extends User {
     public Manager(String id, String name, String email, String phone, String password, List<Course> managedCourses) {
         super(id, name, email, phone, password);
         this.managedCourses = managedCourses;
+    }
+    public Manager(String id, String name, String email, String phone, String password) {
+        super(id, name, email, phone, password);
+        this.managedCourses = new ArrayList<>();
     }
 
     public List<Course> getManagedCourses() {
@@ -26,13 +31,6 @@ public class Manager extends User {
         }
     }
 
-//    public void registerStudentToCourse(Student student, Course course, CourseRegistrationManager manager) {
-//        manager.registerStudentToCourse(student, course);
-//    }
-//
-//    public void assignTeacherToCourse(Teacher teacher, Course course, CourseRegistrationManager manager) {
-//        manager.assignTeacherToCourse(teacher, course);
-//    }
     public void addCourse(Course course) {
         managedCourses.add(course);
     }

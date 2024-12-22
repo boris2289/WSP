@@ -2,7 +2,7 @@ package views;
 
 import users.Teacher;
 import users.Student;
-import studyingProcess.CourseRegistrationManager;
+import managers.CourseRegistrationManager;
 
 import java.util.*;
 

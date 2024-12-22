@@ -1,5 +1,5 @@
 package notifications;
-import users.User;
+import abstractt.User;
 
 import java.io.Serializable;
 import java.util.Date;
