@@ -1,5 +1,6 @@
 package users;
 
+import ENUMS.Role;
 import abstractt.User;
 import studyingProcess.Course;
 
@@ -10,11 +11,11 @@ public class Manager extends User {
     private List<Course> managedCourses;
 
     public Manager(String id, String name, String email, String phone, String password, List<Course> managedCourses) {
-        super(id, name, email, phone, password);
+        super(id, name, email, phone, password, Role.MANAGER);
         this.managedCourses = managedCourses;
     }
     public Manager(String id, String name, String email, String phone, String password) {
-        super(id, name, email, phone, password);
+        super(id, name, email, phone, password, Role.MANAGER);
         this.managedCourses = new ArrayList<>();
     }
 

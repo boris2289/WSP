@@ -1,15 +1,17 @@
 package users;
-
 import ENUMS.Language;
 import ENUMS.Role;
+import abstractt.User;
 import managers.AccountManager;
 import managers.CourseRegistrationManager;
 import serialization.SerializationUtil;
-import studyingProcess.Course;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -29,7 +31,73 @@ public class Admin {
         loadTeachers();
         loadAccountManagers();
         loadCoursesRegistrationManagers();
+
     }
+
+
+
+    public static User registerNewUser(Scanner scanner, String email, Role role) {
+        System.out.print("Enter your name: ");
+        String name = scanner.nextLine();
+
+        System.out.print("Enter your password: ");
+        String password = scanner.nextLine();
+
+        System.out.print("Enter your phone number: ");
+        String phoneNumber = scanner.nextLine();
+
+        Language language = Admin.chooseLanguage(scanner);
+
+        User newUser;
+        if (role == Role.STUDENT) {
+            System.out.print("Enter your major: ");
+            String major = scanner.nextLine();
+
+            newUser = new Student(email, name, email, phoneNumber,password, language, major, "None", 0.0);
+            students.put(email, (Student) newUser);
+        }
+
+        else if (role == Role.TEACHER) {
+            System.out.print("Enter your academic title: ");
+            String title = scanner.nextLine();
+
+            System.out.print("Enter your years of experience: ");
+            int experience = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Enter your salary: ");
+            int salary = Integer.parseInt(scanner.nextLine());
+
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.print("Your hiring date: " + date + '\n');
+
+            newUser = new Teacher(email, name, email, phoneNumber,password, language, title, experience, salary, date);
+            teachers.put(email, (Teacher) newUser);
+        }
+        else {
+            System.out.print("Enter your years of experience: ");
+            int experience = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Enter your salary: ");
+            int salary = Integer.parseInt(scanner.nextLine());
+
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            System.out.print("Your hiring date: " + date + '\n');
+
+            if (role == Role.ACCOUNT_MANAGER) {
+                newUser = new AccountManager(email, name, email, phoneNumber, password, salary, date);
+                accountManagers.put(email, (AccountManager) newUser);
+            } else {
+                newUser = new CourseRegistrationManager(email, name, email, phoneNumber, password);
+                coursesRegistrationManagers.put(email, (CourseRegistrationManager) newUser);
+            }
+        }
+
+        return newUser;
+    }
+
+
     public static Language chooseLanguage(Scanner scanner) {
         System.out.println("Preferred language:");
         System.out.println("1. ENGLISH");
@@ -136,4 +204,38 @@ public class Admin {
     public static HashMap<String, CourseRegistrationManager> getCoursesRegistrationManagers() {
         return coursesRegistrationManagers;
     }
+
+
+    public static void saveStudents() {
+        try (FileOutputStream fileOut = new FileOutputStream(STUDENTS_FILE)) {
+            SerializationUtil.serializeObject(students, fileOut);
+        } catch (IOException e) {
+            System.err.println("Error saving student data: " + e.getMessage());
+        }
+    }
+
+
+    public static void saveTeachers() {
+        try (FileOutputStream fileOut = new FileOutputStream(TEACHERS_FILE)) {
+            SerializationUtil.serializeObject(teachers, fileOut);
+        } catch (IOException e) {
+            System.err.println("Error saving teacher data: " + e.getMessage());
+        }
+    }
+
+    public static void saveAccountManagers() {
+        try (FileOutputStream fileOut = new FileOutputStream(ACCOUNT_MANAGER_FILE)) {
+            SerializationUtil.serializeObject(accountManagers, fileOut);
+        } catch (IOException e) {
+            System.err.println("Error saving accountManagers data: " + e.getMessage());
+        }
+    }
+    public static void saveCoursesRegistrationManagers() {
+        try (FileOutputStream fileOut = new FileOutputStream(COURSE_REGISTRATION_MANAGERS_FILE)) {
+            SerializationUtil.serializeObject(coursesRegistrationManagers, fileOut);
+        } catch (IOException e) {
+            System.err.println("Error saving coursesRegistrationManagers data: " + e.getMessage());
+        }
+    }
+
 }

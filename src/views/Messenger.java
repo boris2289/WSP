@@ -130,7 +130,7 @@ public class Messenger {
 
 
     public static Teacher chooseTeacher(Scanner scanner, String text) {
-        List<Teacher> t = new ArrayList<>(teachers.values()); // Преобразуем коллекцию в список
+        List<Teacher> t = new ArrayList<>(teachers.values());
         System.out.println(text);
         for (int i = 0; i < t.size(); i++) {
             System.out.println(i + ". " + t.get(i).getName());
@@ -140,7 +140,7 @@ public class Messenger {
     }
 
     public static Student chooseStudent(Scanner scanner, String text) {
-        List<Student> t = new ArrayList<>(students.values()); // Преобразуем коллекцию в список
+        List<Student> t = new ArrayList<>(students.values());
         System.out.println(text);
         for (int i = 0; i < t.size(); i++) {
             System.out.println(i + ". " + t.get(i).getName());

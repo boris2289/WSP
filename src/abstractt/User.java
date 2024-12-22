@@ -30,12 +30,12 @@ public abstract class User implements Serializable, Cloneable {
         this.password = password;
     }
     
-    public User(String userId, String name, String email, String phoneNumber, String password) {
+    public User(String userId, String name, String email, String phoneNumber, String password, Role role) {
         this.userId = userId;
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.role = Role.NOBODY;
+        this.role = role;
         this.preferredLanguage = Language.RUSSIAN;
         this.notifications = new ArrayList<>();
         this.password = password;

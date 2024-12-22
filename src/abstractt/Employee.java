@@ -13,8 +13,8 @@ public class Employee extends User {
         this.hireDate = hireDate;
     }
 
-    public Employee(String userId, String name, String email, String phoneNumber, String password, double salary, Date hireDate) {
-        super(userId, name, email, phoneNumber, password);
+    public Employee(String userId, String name, String email, String phoneNumber, String password, double salary, Date hireDate, Role role) {
+        super(userId, name, email, phoneNumber, password, role);
         this.salary = salary;
         this.hireDate = hireDate;
     }

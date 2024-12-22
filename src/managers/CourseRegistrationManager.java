@@ -1,4 +1,5 @@
 package managers;
+import ENUMS.Role;
 import abstractt.User;
 import serialization.Loader;
 import serialization.SerializationUtil;
@@ -19,7 +20,7 @@ public class CourseRegistrationManager extends User {
     private static final String COURSE_FILE = "course.txt";
 
     public CourseRegistrationManager(String userId, String name, String email, String phoneNumber, String password) {
-        super(userId, name, email, phoneNumber, password);
+        super(userId, name, email, phoneNumber, password, Role.COURSE_REGISTRATION_MANAGER);
         loadAllInfo();
     }
 

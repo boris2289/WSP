@@ -1,6 +1,7 @@
 package managers;
 
 import ENUMS.FeeStatus;
+import ENUMS.Role;
 import abstractt.Employee;
 import users.Student;
 import finance.StudentFee;
@@ -17,7 +18,7 @@ public class AccountManager extends Employee {
 
     // Constructor
     public AccountManager(String userId, String name, String email, String phoneNumber, String password, double salary, Date hireDate) {
-        super(userId, name, email, phoneNumber, password, salary, hireDate);
+        super(userId, name, email, phoneNumber, password, salary, hireDate, Role.ACCOUNT_MANAGER);
         this.studentFees = new ArrayList<>();
         this.scholarships = new ArrayList<>();
     }

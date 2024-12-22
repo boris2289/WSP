@@ -15,8 +15,8 @@ public class TransactionDemo {
     public static void main(String[] args) {
 
 
-        Employee employee1 = new Employee("EMP001", "John Doe", "john.doe@example.com", "555-0001", "password123", 3000.0, new Date());
-        Employee employee2 = new Employee("EMP002", "Jane Smith", "jane.smith@example.com", "555-0002", "password456", 3500.0, new Date());
+        Employee employee1 = new Employee("EMP001", "John Doe", "john.doe@example.com", "555-0001", "password123", 3000.0, new Date(), Role.NOBODY);
+        Employee employee2 = new Employee("EMP002", "Jane Smith", "jane.smith@example.com", "555-0002", "password456", 3500.0, new Date(), Role.NOBODY);
 
         Map<Employee, Float> employeeSalaries = new HashMap<>();
         employeeSalaries.put(employee1, (float) employee1.getSalary());
