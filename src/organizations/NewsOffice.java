@@ -9,7 +9,7 @@ import java.util.*;
 public class NewsOffice implements Serializable {
     private static final long serialVersionUID = 1L;
     private final String NEWS_FILE = "news.txt";
-    private HashMap<String, HashMap<String, List<Comment>>> newsPosts;  // newsId -> userId -> comments
+    private HashMap<String, News> newsPosts;  // newsId -> News object
 
     public NewsOffice() {
         this.newsPosts = new HashMap<>();
@@ -18,43 +18,65 @@ public class NewsOffice implements Serializable {
     // Method to create a news post
     public void createNewsPost(User sender, String newsContent) {
         String senderId = sender.getUserId();
+        String newsId = UUID.randomUUID().toString(); // Generate unique newsId
 
-        News news = new News(newsContent, sender, new Date());
+        News news = new News(newsId, newsContent, sender, new Date());
 
         // Deserialize existing news posts
-        deserializeNews(NEWS_FILE);
+        deserializeNewsPosts(NEWS_FILE);
 
         // Add the news post
-        newsPosts.putIfAbsent(news.getNewsId(), new HashMap<>());
-        System.out.println("News posted by " + senderId + ": " + news.getContent());
+        newsPosts.put(newsId, news);
+        System.out.println("News posted by " + senderId + ": " + newsContent);
 
         // Serialize the news posts back to the file
-        serializeNews(NEWS_FILE);
+        serializeNewsPosts(NEWS_FILE);
     }
 
-    // Method to leave a comment under a news post
-    public void leaveComment(User sender, String newsId, String commentContent) {
-        String senderId = sender.getUserId();
+    public static void leaveComment(Scanner scanner, User publisher, NewsOffice newsOffice) {
+        newsOffice.deserializeNewsPosts("news.txt");
 
-        Comment comment = new Comment(sender, commentContent, new Date());
+        // Display available news
+        System.out.println("Available News:");
+        for (Map.Entry<String, News> entry : newsOffice.getNewsPosts().entrySet()) {
+            News news = entry.getValue();
+            System.out.println("ID: " + news.getNewsId());
+            System.out.println("Content: " + news.getContent());
+            System.out.println("Posted by: " + news.getSender().getUserId());
+            System.out.println("Date: " + news.getDatePosted());
+            System.out.println("Comments: " + news.getComments());
+            System.out.println();
+        }
 
-        // Deserialize existing news posts
-        deserializeNews(NEWS_FILE);
+        // Prompt user to select a news item
+        System.out.println("Enter the ID of the news you want to comment on:");
+        String newsId = scanner.next();
 
-        // Add the comment to the specific news post
-        newsPosts.putIfAbsent(newsId, new HashMap<>());
-        HashMap<String, List<Comment>> userComments = newsPosts.get(newsId);
-        userComments.putIfAbsent(senderId, new ArrayList<>());
-        userComments.get(senderId).add(comment);
+        // Prompt user to enter a comment
+        System.out.println("Enter your comment:");
+        scanner.nextLine(); // Consume the newline
+        String comment = scanner.nextLine();
 
-        System.out.println("Comment posted on news " + newsId + " by " + senderId + ": " + comment.getContent());
+        // Add the comment
+        newsOffice.addCommentToNews(newsId,publisher, comment);
 
-        // Serialize the news posts with comments back to the file
-        serializeNews(NEWS_FILE);
+        // Save the updated news posts
+        newsOffice.serializeNewsPosts("news.txt");
     }
+
+    public void addCommentToNews(String newsId,User commentFrom, String comment) {
+        if (newsPosts.containsKey(newsId)) {
+            News news = newsPosts.get(newsId);
+            news.addComment(commentFrom, comment);
+            System.out.println("Comment added successfully!");
+        } else {
+            System.out.println("News with ID " + newsId + " not found.");
+        }
+    }
+
 
     // Serialize the news posts to a file
-    public void serializeNews(String filePath) {
+    public void serializeNewsPosts(String filePath) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
             oos.writeObject(newsPosts);
             System.out.println("News and comments serialized to file: " + filePath);
@@ -63,37 +85,40 @@ public class NewsOffice implements Serializable {
         }
     }
 
-    // Deserialize the news posts and comments from a file
+
+    // Deserialize the news posts and display their contents
     @SuppressWarnings("unchecked")
-    public void deserializeNews(String filePath) {
+    public void deserializeNewsPosts(String filePath) {
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
-            newsPosts = (HashMap<String, HashMap<String, List<Comment>>>) ois.readObject();
+            newsPosts = (HashMap<String, News>) ois.readObject();
 
-            // Iterate through the news posts and comments and print them
-            for (Map.Entry<String, HashMap<String, List<Comment>>> entry : newsPosts.entrySet()) {
-                String newsId = entry.getKey();
-                HashMap<String, List<Comment>> userComments = entry.getValue();
-
-                System.out.println("News ID: " + newsId);
-                System.out.println("Content: " + newsPosts.get(newsId));
-                for (Map.Entry<String, List<Comment>> userEntry : userComments.entrySet()) {
-                    String userId = userEntry.getKey();
-                    List<Comment> comments = userEntry.getValue();
-
-                    System.out.println("\tComments by user: " + userId);
+            // Iterate through the news posts and print their content
+            for (Map.Entry<String, News> entry : newsPosts.entrySet()) {
+                News news = entry.getValue();
+                System.out.println("News ID: " + news.getNewsId());
+                System.out.println("Content: " + news.getContent());
+                System.out.println("Posted by: " + news.getSender().getUserId());
+                System.out.println("Date: " + news.getDatePosted());
+                System.out.println("Comments:");
+                for (Map.Entry<String, List<Comment>> entryComment : news.getComments().entrySet()) {
+                    String authorId = entryComment.getKey();
+                    List<Comment> comments = entryComment.getValue();
+                    System.out.println("Author: " + authorId);
                     for (Comment comment : comments) {
-                        System.out.println("\t\t" + comment.getContent());
+                        System.out.println("    Content: " + comment.getContent());
                     }
+                    System.out.println();
                 }
+                System.out.println(" ");
             }
         } catch (IOException | ClassNotFoundException e) {
             // In case of deserialization error, initialize an empty structure
             newsPosts = new HashMap<>();
-            System.err.println("Error deserializing news and comments: " + e.getMessage());
+            System.err.println("Error deserializing news: " + e.getMessage());
         }
     }
 
-    public HashMap<String, HashMap<String, List<Comment>>> getNewsPosts() {
+    public HashMap<String, News> getNewsPosts() {
         return newsPosts;
     }
 }

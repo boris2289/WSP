@@ -6,7 +6,6 @@ import serialization.Loader;
 import users.Student;
 import users.Teacher;
 import abstractt.User;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,10 +44,14 @@ public class Messenger {
                 publishNews(scanner, newsOffice);
                 break;
             case 4:
-                newsOffice.deserializeNews("news.txt");
+                newsOffice.deserializeNewsPosts("news.txt"); // Use the correct method name
                 break;
+                case 5:
+                    leaveComment(scanner, newsOffice);
+                    break;
+
             default:
-                System.out.println(" ");
+                System.out.println("Invalid option. Please try again.");
         }
 
     }
@@ -78,6 +81,28 @@ public class Messenger {
         String option = scanner.nextLine();
 
         newsOffice.createNewsPost(publisher, option);
+    }
+
+    public static void leaveComment(Scanner scanner, NewsOffice newsOffice) {
+        User publisher = null;
+
+        int choice = dialogueWindow(scanner);
+        switch (choice) {
+            case 1:
+                publisher = chooseTeacher(scanner, "Who are you?");
+                break;
+            case 2:
+                publisher = chooseStudent(scanner, "Who are you?");
+                break;
+            default:
+                System.out.println("Invalid choice, exiting.");
+                return;
+        }
+        if (publisher == null) {
+            System.out.println("Publisher not found.");
+            return;
+        }
+        newsOffice.leaveComment(scanner, publisher, newsOffice);
     }
 
     public static void sendComplaint(Scanner scanner, DeansOffice office) {

@@ -26,6 +26,13 @@ public class News implements Serializable {
         this.timestamp = timestamp;
         this.comments = new HashMap<>();
     }
+    public News(String id, String content, User sender, Date timestamp) {
+        this.newsId = id;
+        this.content = content;
+        this.sender = sender;
+        this.timestamp = timestamp;
+        this.comments = new HashMap<>();
+    }
 
     public String getNewsId() {
         return newsId;
@@ -43,6 +50,7 @@ public class News implements Serializable {
         return timestamp;
     }
 
+
     // Getter for comments
     public HashMap<String, List<Comment>> getComments() {
         return comments;
@@ -53,5 +61,9 @@ public class News implements Serializable {
         Comment comment = new Comment(user, commentContent, new Date());
         comments.putIfAbsent(user.getUserId(), new ArrayList<>());
         comments.get(user.getUserId()).add(comment);
+    }
+
+    public Date getDatePosted() {
+        return timestamp;
     }
 }
