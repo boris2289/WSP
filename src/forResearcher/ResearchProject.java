@@ -1,4 +1,4 @@
-package studyingProcess;
+package forResearcher;
 
 import abstractt.User;
 import users.*;

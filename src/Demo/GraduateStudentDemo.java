@@ -1,6 +1,6 @@
 package Demo;
 
-import studyingProcess.*;
+import forResearcher.ResearchPaper;
 import users.*;
 import ENUMS.*;
 

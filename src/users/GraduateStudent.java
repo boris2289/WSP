@@ -2,8 +2,7 @@ package users;
 
 
 import ENUMS.Language;
-import studyingProcess.ResearchPaper;
-import users.Student;
+import forResearcher.ResearchPaper;
 import ENUMS.DegreeType;
 import java.util.ArrayList;
 import java.util.List;

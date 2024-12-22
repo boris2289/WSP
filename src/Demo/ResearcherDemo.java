@@ -1,9 +1,9 @@
-package views;
+package Demo;
 
-import studyingProcess.ResearchPaper;
+import forResearcher.ResearchPaper;
 import users.Manager;
 import users.Researcher;
-import studyingProcess.ResearchProject;
+import forResearcher.ResearchProject;
 import exceptions.InvalidParticipantException;
 import abstractt.User;
 import ENUMS.Language;

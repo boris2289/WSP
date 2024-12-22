@@ -79,6 +79,9 @@ public class Student extends User implements Serializable, Cloneable {
     public void setBlocked(){
         this.isWSPBlocked = true;
     }
+    public void setSupervisor(Researcher supervisor) {
+        this.supervisor = supervisor;
+    }
 
     @Override
     public String toString() {

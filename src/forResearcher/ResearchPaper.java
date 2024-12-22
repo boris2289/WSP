@@ -1,4 +1,4 @@
-package studyingProcess;
+package forResearcher;
 
 import abstractt.User;
 import ENUMS.FormatType;
@@ -96,5 +96,13 @@ public class ResearchPaper {
     @Override
     public String toString() {
         return String.format("Title: %s, Published: %s, Citations: %d, Pages: %d", title, formatDate(publicationDate), citations, pages);
+    }
+
+    public String getJournal() {
+        return journal;
+    }
+
+    public String getDoi() {
+        return doi;
     }
 }

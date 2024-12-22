@@ -1,6 +1,6 @@
 package comparators;
 
-import studyingProcess.ResearchPaper;
+import forResearcher.ResearchPaper;
 
 import java.util.Comparator;
 

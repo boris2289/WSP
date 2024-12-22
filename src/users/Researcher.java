@@ -6,7 +6,8 @@ import java.util.List;
 import ENUMS.*;
 import abstractt.User;
 import exceptions.InvalidParticipantException;
-import studyingProcess.*;
+import forResearcher.ResearchPaper;
+import forResearcher.ResearchProject;
 
 import java.util.*;
 

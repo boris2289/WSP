@@ -1,6 +1,8 @@
 package views;
 import java.time.LocalDate;
 
+import managers.AccountManager;
+import users.GraduateStudent;
 import users.Student;
 import users.Teacher;
 import abstractt.User;
@@ -20,9 +22,15 @@ public class RegistrationProcess {
     private static final String STUDENTS_FILE = "students.txt";
     private static final String TEACHERS_FILE = "teachers.txt";
     private static final String COURSES_FILE = "courses.txt";
+    private static final String GRADUATE_STUDENTS_FILE = "graduate_students.txt";
+    private static final String ACCOUNT_MANAGER_FILE = "account_managers.txt";
+    private static final String COURSE_REGISTRATION_MANAGERS_FILE  = "registration_managers.txt";
     private static HashMap<String, Student> students = new HashMap<>();
     private static HashMap<String, Teacher> teachers = new HashMap<>();
     private static HashMap<String, Course> courses = new HashMap<>();
+    private static HashMap<String, GraduateStudent> graduateStudents = new HashMap<>();
+    private static HashMap<String, AccountManager> accountManagers = new HashMap<>();
+    private static HashMap<String, Course> coursesRegistrationManagers = new HashMap<>();
 
     public static void main(String[] args) {
         loadStudents();
