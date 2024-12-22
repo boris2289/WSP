@@ -34,7 +34,9 @@ public class Course implements Serializable{
     public String getCourseId() {
         return courseId;
     }
-
+    public void setEnrolledStudents(List<Student> enrolledStudents) {
+        this.enrolledStudents = enrolledStudents;
+}
     public String getCourseName() {
         return courseName;
     }

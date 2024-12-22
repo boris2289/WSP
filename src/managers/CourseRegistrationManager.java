@@ -137,12 +137,20 @@ public class CourseRegistrationManager extends User {
 
 
         Course selectedCourse = findCourseById(coursesTaught, courseId);
-        this.courses.remove(selectedCourse);
+
         if (selectedCourse != null) {
             System.out.println("You have successfully joined the course: " + selectedCourse.getCourseName());
+
             selectedCourse.addEnrolledStudent(selectedStudent);
             selectedStudent.enrollInCourse(selectedCourse);
-            this.courses.add(selectedCourse);
+
+            if (this.courses.contains(selectedCourse)) {
+                this.courses.set(indexChosen, selectedCourse);
+            }
+            else{
+                this.courses.add(selectedCourse);
+            }
+            System.out.println(this.courses);
             saveStudentsToFile(this.students);
             saveCoursesToFile(this.courses);
         } else {
@@ -221,7 +229,6 @@ public class CourseRegistrationManager extends User {
             instructorTeacher.removeCourse(toRemoveCourse);
             this.teachers.put(instructorId, instructorTeacher);
 
-            System.out.println(studentList);
             for (Student student : this.students.values()) {
                 if (studentList.contains(student)) {
 
