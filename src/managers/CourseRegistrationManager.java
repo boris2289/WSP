@@ -1,4 +1,5 @@
 package managers;
+import ENUMS.Language;
 import ENUMS.Role;
 import abstractt.User;
 import serialization.Loader;
@@ -38,10 +39,32 @@ public class CourseRegistrationManager extends User {
         return students;
     }
 
-    public void handleTeacherActions(Scanner scanner,HashMap<String, Teacher> teachers) {
-        System.out.println("=== Create New Course ===");
+    public void handleTeacherActions(Scanner scanner,HashMap<String, Teacher> teachers, Language language) {
+        switch (language) {
+            case ENGLISH:
+                System.out.println("=== Create New Course ===");
+                break;
+            case RUSSIAN:
+                System.out.println("=== Создать новый курс ===");
+                break;
+            case KAZAKH:
+                System.out.println("=== Жаңа курс жасау ===");
+                break;
+        }
 
-        System.out.print("Enter course name: ");
+
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter course name: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите название курса: ");
+                break;
+            case KAZAKH:
+                System.out.print("Курс атауын енгізіңіз: ");
+                break;
+        }
+
         String courseName = scanner.nextLine();
 
         if (teachers == null || teachers.isEmpty()) {
@@ -49,14 +72,36 @@ public class CourseRegistrationManager extends User {
             return;
         }
 
-        System.out.println("Select a teacher from the list:");
+        switch (language) {
+            case ENGLISH:
+                System.out.println("Select a teacher from the list:");
+                break;
+            case RUSSIAN:
+                System.out.println("Выберите преподавателя из списка:");
+                break;
+            case KAZAKH:
+                System.out.println("Тізімнен мұғалімді таңдаңыз:");
+                break;
+        }
+
         int index = 1;
         for (Teacher teacher : teachers.values()) {
             System.out.println(index + ". " + teacher.getName());
             index++;
         }
 
-        System.out.print("Enter the number of your choice: ");
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter the number of your choice: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите номер вашего выбора: ");
+                break;
+            case KAZAKH:
+                System.out.print("Таңдауыңыздың нөмірін енгізіңіз: ");
+                break;
+        }
+
         int teacherChoice = Integer.parseInt(scanner.nextLine());
 
         if (teacherChoice < 1 || teacherChoice > teachers.size()) {
@@ -76,25 +121,58 @@ public class CourseRegistrationManager extends User {
         saveCoursesToFile(this.courses);
         saveTeachersToFile(this.teachers);
 
-        System.out.println("Course " + newCourse.getCourseName() + " added with ID: " + newCourse.getCourseId());
+        switch (language) {
+            case ENGLISH:
+                System.out.println("Course " + newCourse.getCourseName() + " added with ID: " + newCourse.getCourseId());
+                break;
+            case RUSSIAN:
+                System.out.println("Курс " + newCourse.getCourseName() + " добавлен с ID: " + newCourse.getCourseId());
+                break;
+            case KAZAKH:
+                System.out.println("Курс " + newCourse.getCourseName() + " қосылды, ID: " + newCourse.getCourseId());
+                break;
+        }
+
     }
 
 
 
-    public void handleStudentActions(Scanner scanner, HashMap<String, Student> students) {
+    public void handleStudentActions(Scanner scanner, HashMap<String, Student> students, Language language) {
         if (this.teachers == null || this.teachers.isEmpty()) {
             System.out.println("No teachers available for course selection.");
             return;
         }
 
-        System.out.println("Select a student from the list:");
+        switch (language) {
+            case ENGLISH:
+                System.out.println("Select a student from the list:");
+                break;
+            case RUSSIAN:
+                System.out.println("Выберите студента из списка:");
+                break;
+            case KAZAKH:
+                System.out.println("Тізімнен студентті таңдаңыз:");
+                break;
+        }
+
         int index_student = 1;
         for (Student student : students.values()) {
             System.out.println(index_student + ". " + student.getName());
             index_student++;
         }
 
-        System.out.print("Enter the number of your choice: ");
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter the number of your choice: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите номер вашего выбора: ");
+                break;
+            case KAZAKH:
+                System.out.print("Сіздің таңдауыңыздың нөмірін енгізіңіз: ");
+                break;
+        }
+
         int studentChoice = Integer.parseInt(scanner.nextLine());
 
         if (studentChoice < 1 || studentChoice > students.size()) {
@@ -104,14 +182,36 @@ public class CourseRegistrationManager extends User {
         Student selectedStudent = (Student) students.values().toArray()[studentChoice - 1];
 
 
-        System.out.println("=== Select a Teacher ===");
+        switch (language) {
+            case ENGLISH:
+                System.out.println("=== Select a Teacher ===");
+                break;
+            case RUSSIAN:
+                System.out.println("=== Выберите преподавателя ===");
+                break;
+            case KAZAKH:
+                System.out.println("=== Мұғалімді таңдаңыз ===");
+                break;
+        }
+
         int index = 1;
         for (Teacher teacher : teachers.values()) {
             System.out.println(index + ". " + teacher.getName());
             index++;
         }
 
-        System.out.print("Enter the number of your choice: ");
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter the number of your choice: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите номер вашего выбора: ");
+                break;
+            case KAZAKH:
+                System.out.print("Сіздің таңдауыңыздың нөмірін енгізіңіз: ");
+                break;
+        }
+
         int teacherChoice = Integer.parseInt(scanner.nextLine());
 
         if (teacherChoice < 1 || teacherChoice > teachers.size()) {
@@ -127,7 +227,18 @@ public class CourseRegistrationManager extends User {
             return;
         }
 
-        System.out.println("Select a course taught by " + selectedTeacher.getName() + ":");
+        switch (language) {
+            case ENGLISH:
+                System.out.println("Select a course taught by " + selectedTeacher.getName() + ":");
+                break;
+            case RUSSIAN:
+                System.out.println("Выберите курс, преподаваемый " + selectedTeacher.getName() + ":");
+                break;
+            case KAZAKH:
+                System.out.println(selectedTeacher.getName() + " оқытатын курсты таңдаңыз:");
+                break;
+        }
+
         for (int i = 0; i < coursesTaught.size(); i++) {
             Course course = coursesTaught.get(i);
             System.out.println(i + ". " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
@@ -139,7 +250,18 @@ public class CourseRegistrationManager extends User {
         Course selectedCourse = findCourseById(coursesTaught, courseId);
 
         if (selectedCourse != null) {
-            System.out.println("You have successfully joined the course: " + selectedCourse.getCourseName());
+            switch (language) {
+                case ENGLISH:
+                    System.out.println("You have successfully joined the course: " + selectedCourse.getCourseName());
+                    break;
+                case RUSSIAN:
+                    System.out.println("Вы успешно присоединились к курсу: " + selectedCourse.getCourseName());
+                    break;
+                case KAZAKH:
+                    System.out.println("Сіз курсқа сәтті қосылдыңыз: " + selectedCourse.getCourseName());
+                    break;
+            }
+
 
             selectedCourse.addEnrolledStudent(selectedStudent);
             selectedStudent.enrollInCourse(selectedCourse);
@@ -205,12 +327,23 @@ public class CourseRegistrationManager extends User {
 
 
     // Удаление курса
-    public void removeCourse(Scanner scanner) {
+    public void removeCourse(Scanner scanner, Language language) {
         if (this.courses.isEmpty()) {
             System.out.println(this.students);
         }
         else{
-            System.out.println("Choose the course to remove");
+            switch (language) {
+                case ENGLISH:
+                    System.out.println("Choose the course to remove");
+                    break;
+                case RUSSIAN:
+                    System.out.println("Выберите курс для удаления");
+                    break;
+                case KAZAKH:
+                    System.out.println("Жою үшін курс таңдаңыз");
+                    break;
+            }
+
             for (int i = 0; i < courses.size(); i++) {
                 Course course = courses.get(i);
                 System.out.println(i + ". " + course.getCourseName() + " (ID: " + course.getCourseId() + ")");
@@ -246,7 +379,18 @@ public class CourseRegistrationManager extends User {
             saveStudentsToFile(students);
 
             loadAllInfo();
-            System.out.println("Course " + toRemoveCourse + " removed successfully.");
+            switch (language) {
+                case ENGLISH:
+                    System.out.println("Course " + toRemoveCourse + " removed successfully.");
+                    break;
+                case RUSSIAN:
+                    System.out.println("Курс " + toRemoveCourse + " успешно удалён.");
+                    break;
+                case KAZAKH:
+                    System.out.println("Курс " + toRemoveCourse + " сәтті жойылды.");
+                    break;
+            }
+
         }
 
 

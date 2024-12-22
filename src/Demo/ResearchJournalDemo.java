@@ -13,8 +13,8 @@ import java.util.List;
 public class ResearchJournalDemo {
     public static void main(String[] args) {
         // Create Researcher authors
-        Researcher author1 = new Researcher("R001", "Alice Johnson", "alice.johnson@example.com", "122", "1", Language.ENGLISH);
-        Researcher author2 = new Researcher("R002", "Alice Johnson", "alice.johnson@example.com","122", "1", Language.ENGLISH);
+        Researcher author1 = new Researcher("R001", "Boris", "boris@example.com", "122", "1", Language.ENGLISH);
+        Researcher author2 = new Researcher("R002", "Boris", "boris@example.com","122", "1", Language.ENGLISH);
 
         // Create a list of authors
         List<User> authors = new ArrayList<>();

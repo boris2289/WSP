@@ -86,19 +86,48 @@ public class Admin {
         }
     }
 
-    public static void removeUser(Scanner scanner) {
-        System.out.println("Who you want to delete ?");
-        System.out.println("1. Student");
-        System.out.println("2. Teacher");
-        System.out.println("3. Course Registration Manager");
-        System.out.println("4. Account Manager");
+    public static void removeUser(Scanner scanner, Language language) {
+        switch (language) {
+            case ENGLISH:
+                System.out.println("Who do you want to delete?");
+                System.out.println("1. Student");
+                System.out.println("2. Teacher");
+                System.out.println("3. Course Registration Manager");
+                System.out.println("4. Account Manager");
+                break;
+            case RUSSIAN:
+                System.out.println("Кого вы хотите удалить?");
+                System.out.println("1. Студент");
+                System.out.println("2. Преподаватель");
+                System.out.println("3. Менеджер по регистрации на курсы");
+                System.out.println("4. Менеджер по учетным записям");
+                break;
+            case KAZAKH:
+                System.out.println("Кімді жойғыңыз келеді?");
+                System.out.println("1. Студент");
+                System.out.println("2. Мұғалім");
+                System.out.println("3. Курстарға тіркеу менеджері");
+                System.out.println("4. Есептік жазбалар менеджері");
+                break;
+        }
+
 
         int roleChoice = scanner.nextInt();
         scanner.nextLine();
 
         switch (roleChoice) {
             case 1:
-                System.out.println("Choose student to delete");
+                switch (language) {
+                    case ENGLISH:
+                        System.out.println("Choose student to delete");
+                        break;
+                    case RUSSIAN:
+                        System.out.println("Выберите студента для удаления");
+                        break;
+                    case KAZAKH:
+                        System.out.println("Жою үшін студентті таңдаңыз");
+                        break;
+                }
                 ArrayList<Student> studentsToDelete = new ArrayList<>();
                 studentsToDelete.addAll(students.values());
                 int index = 0;
@@ -112,7 +141,18 @@ public class Admin {
                 saveStudents();
                 break;
             case 2:
-                System.out.println("Choose teacher to delete");
+                switch (language) {
+                    case ENGLISH:
+                        System.out.println("Choose teacher to delete");
+                        break;
+                    case RUSSIAN:
+                        System.out.println("Выберите преподавателя для удаления");
+                        break;
+                    case KAZAKH:
+                        System.out.println("Жою үшін мұғалімді таңдаңыз");
+                        break;
+                }
+
                 ArrayList<Teacher> teachersToDelete = new ArrayList<>();
                 teachersToDelete.addAll(teachers.values());
                 index = 0;
@@ -126,7 +166,18 @@ public class Admin {
                 saveTeachers();
                 break;
             case 3:
-                System.out.println("Choose course registration manager to delete");
+                switch (language) {
+                    case ENGLISH:
+                        System.out.println("Choose course registration manager to delete");
+                        break;
+                    case RUSSIAN:
+                        System.out.println("Выберите менеджера по регистрации на курсы для удаления");
+                        break;
+                    case KAZAKH:
+                        System.out.println("Жою үшін курстарға тіркеу менеджерін таңдаңыз");
+                        break;
+                }
+
                 ArrayList<CourseRegistrationManager> courseRegistrationManagersToDelete = new ArrayList<>();
                 courseRegistrationManagersToDelete.addAll(coursesRegistrationManagers.values());
                 index = 0;
@@ -140,7 +191,18 @@ public class Admin {
                 saveCoursesRegistrationManagers();
                 break;
             case 4:
-                System.out.println("Choose account manager to delete");
+                switch (language) {
+                    case ENGLISH:
+                        System.out.println("Choose account manager to delete");
+                        break;
+                    case RUSSIAN:
+                        System.out.println("Выберите менеджера аккаунтов для удаления");
+                        break;
+                    case KAZAKH:
+                        System.out.println("Жою үшін есептік жазба менеджерін таңдаңыз");
+                        break;
+                }
+
                 ArrayList<AccountManager> accountManagersToDelete = new ArrayList<>();
                 accountManagersToDelete.addAll(accountManagers.values());
                 index = 0;
@@ -161,54 +223,175 @@ public class Admin {
 
 
 
-    public static User registerNewUser(Scanner scanner, String email, Role role) {
-        System.out.print("Enter your name: ");
+    public static User registerNewUser(Scanner scanner, String email, Role role, Language language) {
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter your name: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите ваше имя: ");
+                break;
+            case KAZAKH:
+                System.out.print("Атыңызды енгізіңіз: ");
+                break;
+        }
+
         String name = scanner.nextLine();
 
-        System.out.print("Enter your password: ");
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter your password: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите ваш пароль: ");
+                break;
+            case KAZAKH:
+                System.out.print("Парольді енгізіңіз: ");
+                break;
+        }
+
         String password = scanner.nextLine();
 
-        System.out.print("Enter your phone number: ");
+        switch (language) {
+            case ENGLISH:
+                System.out.print("Enter your phone number: ");
+                break;
+            case RUSSIAN:
+                System.out.print("Введите ваш номер телефона: ");
+                break;
+            case KAZAKH:
+                System.out.print("Телефон нөміріңізді енгізіңіз: ");
+                break;
+        }
+
         String phoneNumber = scanner.nextLine();
 
-        Language language = Admin.chooseLanguage(scanner);
+        Language language_ = Admin.chooseLanguage(scanner);
 
         User newUser;
         if (role == Role.STUDENT) {
-            System.out.print("Enter your major: ");
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Enter your major: ");
+                    break;
+                case RUSSIAN:
+                    System.out.print("Введите вашу специальность: ");
+                    break;
+                case KAZAKH:
+                    System.out.print("Мамандығыңызды енгізіңіз: ");
+                    break;
+            }
+
             String major = scanner.nextLine();
 
-            newUser = new Student(email, name, email, phoneNumber,password, language, major, "None", 0.0);
+            newUser = new Student(email, name, email, phoneNumber,password, language_, major, "None", 0.0);
             students.put(email, (Student) newUser);
         }
 
         else if (role == Role.TEACHER) {
-            System.out.print("Enter your academic title: ");
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Enter your academic title: ");
+                    break;
+                case RUSSIAN:
+                    System.out.print("Введите вашу академическую степень: ");
+                    break;
+                case KAZAKH:
+                    System.out.print("Академиялық дәрежеңізді енгізіңіз: ");
+                    break;
+            }
+
             String title = scanner.nextLine();
 
-            System.out.print("Enter your years of experience: ");
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Enter your years of experience: ");
+                    break;
+                case RUSSIAN:
+                    System.out.print("Введите ваши годы опыта: ");
+                    break;
+                case KAZAKH:
+                    System.out.print("Тәжірибеңізді енгізіңіз: ");
+                    break;
+            }
+
             int experience = Integer.parseInt(scanner.nextLine());
 
-            System.out.print("Enter your salary: ");
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Enter your salary: ");
+                    break;
+                case RUSSIAN:
+                    System.out.print("Введите вашу зарплату: ");
+                    break;
+                case KAZAKH:
+                    System.out.print("Жалақыңызды енгізіңіз: ");
+                    break;
+            }
+
             int salary = Integer.parseInt(scanner.nextLine());
 
             LocalDate localDate = LocalDate.now();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            System.out.print("Your hiring date: " + date + '\n');
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Your hiring date: " + date + '\n');
+                    break;
+                case RUSSIAN:
+                    System.out.print("Ваша дата найма: " + date + '\n');
+                    break;
+                case KAZAKH:
+                    System.out.print("Сіздің жұмысқа қабылданған күніңіз: " + date + '\n');
+                    break;
+            }
 
-            newUser = new Teacher(email, name, email, phoneNumber,password, language, title, experience, salary, date);
+
+            newUser = new Teacher(email, name, email, phoneNumber,password, language_, title, experience, salary, date);
             teachers.put(email, (Teacher) newUser);
         }
         else {
-            System.out.print("Enter your years of experience: ");
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Enter your years of experience: ");
+                    break;
+                case RUSSIAN:
+                    System.out.print("Введите ваш опыт работы в годах: ");
+                    break;
+                case KAZAKH:
+                    System.out.print("Жұмыс өтіліңізді енгізіңіз: ");
+                    break;
+            }
+
             int experience = Integer.parseInt(scanner.nextLine());
 
-            System.out.print("Enter your salary: ");
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Enter your salary: ");
+                    break;
+                case RUSSIAN:
+                    System.out.print("Введите вашу зарплату: ");
+                    break;
+                case KAZAKH:
+                    System.out.print("Жалақыңызды енгізіңіз: ");
+                    break;
+            }
+
             int salary = Integer.parseInt(scanner.nextLine());
 
             LocalDate localDate = LocalDate.now();
             Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-            System.out.print("Your hiring date: " + date + '\n');
+            switch (language) {
+                case ENGLISH:
+                    System.out.print("Your hiring date: " + date + '\n');
+                    break;
+                case RUSSIAN:
+                    System.out.print("Дата вашего найма: " + date + '\n');
+                    break;
+                case KAZAKH:
+                    System.out.print("Сіздің жұмысқа алынған күніңіз: " + date + '\n');
+                    break;
+            }
+
 
             if (role == Role.ACCOUNT_MANAGER) {
                 newUser = new AccountManager(email, name, email, phoneNumber, password, salary, date);

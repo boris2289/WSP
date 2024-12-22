@@ -1,4 +1,5 @@
 package managers;
+import ENUMS.Language;
 import customInterfaces.markUpdater;
 import serialization.SerializationUtil;
 import studyingProcess.Course;
@@ -24,8 +25,19 @@ public class MarkJournal implements markUpdater {
 
     }
 
-    public void chooseCourse(Scanner scanner) {
-        System.out.println("=== Choose course to put marks ===");
+    public void chooseCourse(Scanner scanner, Language language) {
+        switch (language) {
+            case ENGLISH:
+                System.out.println("=== Choose course to put marks ===");
+                break;
+            case RUSSIAN:
+                System.out.println("=== Выберите курс для выставления оценок ===");
+                break;
+            case KAZAKH:
+                System.out.println("=== Бағаларды қою үшін курсты таңдаңыз ===");
+                break;
+        }
+
         int index = 0;
 
         for (Course course : courses) {
@@ -37,11 +49,33 @@ public class MarkJournal implements markUpdater {
         Course course = courses.get(courseIndex);
         scanner.nextLine();
 
-        System.out.println("Current instructor for this course: " + course.getInstructor().getName());
+        switch (language) {
+            case ENGLISH:
+                System.out.println("Current instructor for this course: " + course.getInstructor().getName());
+                break;
+            case RUSSIAN:
+                System.out.println("Текущий преподаватель этого курса: " + course.getInstructor().getName());
+                break;
+            case KAZAKH:
+                System.out.println("Осы курстың ағымдағы оқытушысы: " + course.getInstructor().getName());
+                break;
+        }
+
 
         List<Student> students = course.getEnrolledStudents();
 
-        System.out.println("=== Choose student to put marks ===");
+        switch (language) {
+            case ENGLISH:
+                System.out.println("=== Choose student to put marks ===");
+                break;
+            case RUSSIAN:
+                System.out.println("=== Выберите студента для выставления оценок ===");
+                break;
+            case KAZAKH:
+                System.out.println("=== Баға қою үшін студентті таңдаңыз ===");
+                break;
+        }
+
         int indexStudent = 0;
         for (Student student: students){
             System.out.println(indexStudent + ". " + student.getName());
@@ -51,7 +85,18 @@ public class MarkJournal implements markUpdater {
         scanner.nextLine();
         Student chosenStudent = students.get(studentIndex);
         String chosenStudentId = chosenStudent.getUserId();
-        System.out.println("What attestation do you want to evaluate ?");
+        switch (language) {
+            case ENGLISH:
+                System.out.println("What attestation do you want to evaluate?");
+                break;
+            case RUSSIAN:
+                System.out.println("Какую аттестацию вы хотите оценить?");
+                break;
+            case KAZAKH:
+                System.out.println("Қай аттестацияны бағалағыңыз келеді?");
+                break;
+        }
+
 
         int attestation1 = 0;
         int attestation2 = 0;
@@ -122,22 +167,44 @@ public class MarkJournal implements markUpdater {
         }
     }
 
-    public void viewAllMarks() {
-        System.out.println("=== View all marks ===");
+    public void viewAllMarks(Language language) {
+        switch (language) {
+            case ENGLISH:
+                System.out.println("What attestation do you want to evaluate?");
+                break;
+            case RUSSIAN:
+                System.out.println("Какую аттестацию вы хотите оценить?");
+                break;
+            case KAZAKH:
+                System.out.println("Қай аттестацияны бағалағыңыз келеді?");
+                break;
+        }
+
         Map<String, Map<String, Integer>> attestationMarks = loadAllMarks();
         if (attestationMarks == null) {
-            System.out.println("No marks loaded");
+            switch (language) {
+                case ENGLISH:
+                    System.out.println("No marks loaded");
+                    break;
+                case RUSSIAN:
+                    System.out.println("Оценки не загружены");
+                    break;
+                case KAZAKH:
+                    System.out.println("Бағалар жүктелмеді");
+                    break;
+            }
+
         }
         else{
             for(Map.Entry<String, Map<String, Integer>> entry : attestationMarks.entrySet()) {
-                System.out.println("Student ID: " + entry.getKey());
+                System.out.println("ID: " + entry.getKey());
                 System.out.println("Attestation 1: " + entry.getValue().get("attestation1"));
                 System.out.println("Attestation 2: " + entry.getValue().get("attestation2"));
                 System.out.println("Final points: " + entry.getValue().get("finalPoints"));
             }
         }
     }
-    public void generateSimpleReport() {
+    public void generateSimpleReport(Language language) {
         System.out.println("=== Generate simple report ===");
         Map<String, Integer> markSum = new HashMap<>();
         Map<String, Map<String, Integer>> attestationMarks = loadAllMarks();
@@ -173,11 +240,30 @@ public class MarkJournal implements markUpdater {
         // Calculate average mark
         double averageMark = totalMarks / (double) markSum.size();
 
-        System.out.println("The best student on course: " + bestStudent);
-        System.out.println("Highest marks: " + maxMarks);
-        System.out.println("The worst student on course: " + worstStudent);
-        System.out.println("Lowest marks: " + minMarks);
-        System.out.println("Average marks: " + averageMark);
+        switch (language) {
+            case ENGLISH:
+                System.out.println("The best student on course: " + bestStudent);
+                System.out.println("Highest marks: " + maxMarks);
+                System.out.println("The worst student on course: " + worstStudent);
+                System.out.println("Lowest marks: " + minMarks);
+                System.out.println("Average marks: " + averageMark);
+                break;
+            case RUSSIAN:
+                System.out.println("Лучший студент на курсе: " + bestStudent);
+                System.out.println("Максимальные оценки: " + maxMarks);
+                System.out.println("Худший студент на курсе: " + worstStudent);
+                System.out.println("Минимальные оценки: " + minMarks);
+                System.out.println("Средний балл: " + averageMark);
+                break;
+            case KAZAKH:
+                System.out.println("Курс бойынша ең жақсы студент: " + bestStudent);
+                System.out.println("Ең жоғары балл: " + maxMarks);
+                System.out.println("Курс бойынша ең нашар студент: " + worstStudent);
+                System.out.println("Ең төмен балл: " + minMarks);
+                System.out.println("Орташа балл: " + averageMark);
+                break;
+        }
+
     }
 
 
