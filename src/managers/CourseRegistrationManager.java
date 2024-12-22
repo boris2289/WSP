@@ -1,4 +1,5 @@
 package managers;
+import abstractt.User;
 import serialization.Loader;
 import serialization.SerializationUtil;
 import studyingProcess.Course;
@@ -7,7 +8,7 @@ import users.Teacher;
 import java.io.*;
 import java.util.*;
 
-public class CourseRegistrationManager extends Loader {
+public class CourseRegistrationManager extends User {
 
     private List<Course> courses;
     private HashMap<String, Teacher> teachers;
@@ -17,7 +18,8 @@ public class CourseRegistrationManager extends Loader {
     private static final String STUDENT_FILE = "students.txt";
     private static final String COURSE_FILE = "course.txt";
 
-    public CourseRegistrationManager() {
+    public CourseRegistrationManager(String userId, String name, String email, String phoneNumber, String password) {
+        super(userId, name, email, phoneNumber, password);
         loadAllInfo();
     }
 
@@ -146,6 +148,48 @@ public class CourseRegistrationManager extends Loader {
             System.out.println("Invalid course ID.");
         }
 
+    }
+    public static HashMap<String, Teacher> loadTeachersFromFile() {
+        try (FileInputStream fileIn = new FileInputStream(TEACHER_FILE)) {
+            Object obj = SerializationUtil.deserializeObject(fileIn);
+            if (obj instanceof HashMap<?, ?>) {
+                return (HashMap<String, Teacher>) obj;
+            } else {
+                System.err.println("Unexpected data format in teachers file.");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No teachers found. A new one will be created.");
+        } catch (IOException e) {
+            System.err.println("Error loading teachers: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public static HashMap<String, Student> loadStudentsFromFile() {
+        try (FileInputStream fileIn = new FileInputStream(STUDENT_FILE)) {
+            return (HashMap<String, Student>) SerializationUtil.deserializeObject(fileIn);
+        } catch (FileNotFoundException e) {
+            System.out.println("No students file found. A new one will be created.");
+        } catch (IOException e) {
+            System.err.println("Error loading students: " + e.getMessage());
+        }
+        return new HashMap<String, Student>();
+    }
+
+    public static List<Course> loadCoursesFromFile() {
+        try (FileInputStream fileIn = new FileInputStream(COURSE_FILE)) {
+            Object obj = SerializationUtil.deserializeObject(fileIn);
+            if (obj instanceof List<?>) {
+                return (List<Course>) obj;
+            } else {
+                System.err.println("Unexpected data format in courses file.");
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("No courses file found. A new one will be created.");
+        } catch (IOException e) {
+            System.err.println("Error loading courses: " + e.getMessage());
+        }
+        return new ArrayList<>();
     }
 
 

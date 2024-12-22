@@ -7,5 +7,7 @@ public enum Role {
     ADMIN,
     RESEARCHER,
     MANAGER,
-    NOBODY
+    NOBODY,
+    ACCOUNT_MANAGER,
+    COURSE_REGISTRATION_MANAGER,
 }

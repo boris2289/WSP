@@ -10,7 +10,7 @@ public class CourseManaging {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        CourseRegistrationManager manager = new CourseRegistrationManager();
+        CourseRegistrationManager manager = new CourseRegistrationManager("123", "Boris", "boris@gmail", "454523", "12345");
 
         System.out.println("Remove or add course?");
         System.out.println("1. Add");

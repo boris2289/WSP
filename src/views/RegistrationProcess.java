@@ -2,6 +2,8 @@ package views;
 import java.time.LocalDate;
 
 import managers.AccountManager;
+import managers.CourseRegistrationManager;
+import users.Admin;
 import users.GraduateStudent;
 import users.Student;
 import users.Teacher;
@@ -19,44 +21,55 @@ import java.util.Scanner;
 
 public class RegistrationProcess {
 
-    private static final String STUDENTS_FILE = "students.txt";
-    private static final String TEACHERS_FILE = "teachers.txt";
-    private static final String COURSES_FILE = "courses.txt";
-    private static final String GRADUATE_STUDENTS_FILE = "graduate_students.txt";
-    private static final String ACCOUNT_MANAGER_FILE = "account_managers.txt";
-    private static final String COURSE_REGISTRATION_MANAGERS_FILE  = "registration_managers.txt";
-    private static HashMap<String, Student> students = new HashMap<>();
-    private static HashMap<String, Teacher> teachers = new HashMap<>();
-    private static HashMap<String, Course> courses = new HashMap<>();
-    private static HashMap<String, GraduateStudent> graduateStudents = new HashMap<>();
-    private static HashMap<String, AccountManager> accountManagers = new HashMap<>();
-    private static HashMap<String, Course> coursesRegistrationManagers = new HashMap<>();
-
     public static void main(String[] args) {
-        loadStudents();
-        loadTeachers();
-        loadCourses();
+        Admin admin = new Admin();
+        Admin.loadAllInformation();
 
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=== Welcome to the WSP ===");
+        System.out.println("What is your role ?");
+        System.out.println("1. Student");
+        System.out.println("2. Teacher");
+        System.out.println("3. Course Registration Manager");
+        System.out.println("4. Account Manager");
+
         System.out.print("Enter your login (email): ");
         String email = scanner.nextLine();
 
         System.out.print("Enter your password: ");
         String password = scanner.nextLine();
 
-        User user = students.get(email);
-        if (user == null) {
-            user = teachers.get(email);
+        int choice = scanner.nextInt();
+        Role chosenRole = null;
+        User user = null;
+        switch (choice) {
+            case 1:
+                user = Admin.getStudents().get(email);
+                chosenRole = Role.STUDENT;
+                break;
+
+            case 2:
+                user = Admin.getTeachers().get(email);
+                chosenRole = Role.TEACHER;
+                break;
+
+            case 3:
+                user = Admin.getCoursesRegistrationManagers().get(email);
+                chosenRole = Role.COURSE_REGISTRATION_MANAGER;
+
+            case 4:
+                user = Admin.getAccountManagers().get(email);
+                chosenRole = Role.ACCOUNT_MANAGER;
         }
+
 
         if (user == null) {
             System.out.println("No account found. Registering a new user.");
-            user = registerNewUser(scanner, email);
+            user = registerNewUser(scanner, email, chosenRole);
         } else {
             System.out.println("Account found. Verifying password...");
-            if (!password.equals(user.getPassword())) { // Simplified password check
+            if (!password.equals(user.getPassword())) {
                 System.out.println("Login failed. Incorrect password.");
                 return;
             }
@@ -72,7 +85,7 @@ public class RegistrationProcess {
         saveTeachers();
     }
 
-    private static User registerNewUser(Scanner scanner, String email) {
+    private static User registerNewUser(Scanner scanner, String email, Role role) {
         System.out.print("Enter your name: ");
         String name = scanner.nextLine();
         
@@ -82,9 +95,7 @@ public class RegistrationProcess {
         System.out.print("Enter your phone number: ");
         String phoneNumber = scanner.nextLine();
 
-        Role role = chooseRole(scanner);
-
-        Language language = chooseLanguage(scanner);
+        Language language = Admin.chooseLanguage(scanner);
 
         User newUser;
         if (role == Role.STUDENT) {
@@ -133,27 +144,6 @@ public class RegistrationProcess {
         }
     }
 
-    private static Language chooseLanguage(Scanner scanner) {
-        System.out.println("Preferred language:");
-        System.out.println("1. ENGLISH");
-        System.out.println("2. RUSSIAN");
-        System.out.println("3. KAZAKH");
-
-        while (true) {
-            System.out.print("Enter the number of your choice: ");
-            int choice = Integer.parseInt(scanner.nextLine());
-            switch (choice) {
-                case 1:
-                    return Language.ENGLISH;
-                case 2:
-                    return Language.RUSSIAN;
-                case 3:
-                    return Language.KAZAKH;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-            }
-        }
-    }
 
     private static void assignRolePrivileges(User user) {
         if (user instanceof Student) {
@@ -165,23 +155,6 @@ public class RegistrationProcess {
         }
     }
 
-    private static void loadStudents() {
-        try (FileInputStream fileIn = new FileInputStream(STUDENTS_FILE)) {
-            Object obj = SerializationUtil.deserializeObject(fileIn);
-            if (obj instanceof HashMap<?, ?>) {
-                students = (HashMap<String, Student>) obj;
-            } else {
-                System.err.println("Unexpected data format in students file. Starting fresh.");
-                students = new HashMap<>();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("No previous student data found. Starting fresh.");
-            students = new HashMap<>();
-        } catch (IOException e) {
-            System.err.println("Error loading student data: " + e.getMessage());
-            students = new HashMap<>();
-        }
-    }
 
     private static void saveStudents() {
         try (FileOutputStream fileOut = new FileOutputStream(STUDENTS_FILE)) {
@@ -191,23 +164,6 @@ public class RegistrationProcess {
         }
     }
 
-    private static void loadTeachers() {
-        try (FileInputStream fileIn = new FileInputStream(TEACHERS_FILE)) {
-            Object obj = SerializationUtil.deserializeObject(fileIn);
-            if (obj instanceof HashMap<?, ?>) {
-                teachers = (HashMap<String, Teacher>) obj;
-            } else {
-                System.err.println("Unexpected data format in teachers file. Starting fresh.");
-                teachers = new HashMap<>();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("No previous teacher data found. Starting fresh.");
-            teachers = new HashMap<>();
-        } catch (IOException e) {
-            System.err.println("Error loading teacher data: " + e.getMessage());
-            teachers = new HashMap<>();
-        }
-    }
 
     private static void saveTeachers() {
         try (FileOutputStream fileOut = new FileOutputStream(TEACHERS_FILE)) {
@@ -217,41 +173,5 @@ public class RegistrationProcess {
         }
     }
 
-    private static void loadCourses() {
-        try (FileInputStream fileIn = new FileInputStream(COURSES_FILE)) {
-            Object obj = SerializationUtil.deserializeObject(fileIn);
-            if (obj instanceof HashMap<?, ?>) {
-                courses = (HashMap<String, Course>) obj;
-            } else {
-                System.err.println("Unexpected data format in courses file. Starting fresh.");
-                courses = new HashMap<>();
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("No previous course data found. Starting fresh.");
-            courses = new HashMap<>();
-        } catch (IOException e) {
-            System.err.println("Error loading course data: " + e.getMessage());
-            courses = new HashMap<>();
-        }
-    }
 
-    private static void registerForCourses(Student student) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Available courses:");
-
-        for (Course course : courses.values()) {
-            System.out.println(course);
-        }
-
-        System.out.print("Select a course by entering its ID: ");
-        String courseId = scanner.nextLine();
-
-        Course selectedCourse = courses.get(courseId);
-        if (selectedCourse != null) {
-            student.enrollInCourse(selectedCourse);
-            System.out.println("Course " + selectedCourse.getCourseName() + " registered successfully.");
-        } else {
-            System.out.println("Invalid course ID. Please try again.");
-        }
-    }
 }
